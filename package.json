@@ -1,0 +1,10 @@
+{
+  "devDependencies": {
+    "tsx": "^4.19.3",
+    "typescript": "^5.8.2"
+  },
+  "dependencies": {
+    "langchain": "^0.3.19",
+    "redis": "^4.7.0"
+  }
+}
