@@ -1,10 +1,16 @@
 {
     "devDependencies": {
+        "@types/redis": "^4.0.10",
         "tsx": "^4.19.3",
         "typescript": "^5.8.2"
     },
     "dependencies": {
-        "langchain": "^0.3.19",
+        "@huggingface/inference": "^3.11.0",
+        "@huggingface/transformers": "^3.5.1",
+        "@langchain/redis": "^0.1.1",
+        "dotenv": "^16.5.0",
+        "langchain": "^0.3.21",
+        "llamaindex": "^0.10.2",
         "pnpm": "^10.8.0",
         "puppeteer": "^24.3.1",
         "redis": "^4.7.0"
