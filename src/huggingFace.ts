@@ -7,7 +7,7 @@ export class HuggingFaceEmbedder {
   private model: string;
 
 
-  constructor(apiKey: string,model = "sentence-transformers/all-MiniLM-L6-v2") {
+  constructor(apiKey: string,model = "deepseek-ai/DeepSeek-Prover-V2-671B") {
     this.apiKey = apiKey;
     this.model = model;
   }

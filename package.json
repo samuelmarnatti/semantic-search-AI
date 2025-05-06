@@ -7,6 +7,7 @@
     "dependencies": {
         "@huggingface/inference": "^3.11.0",
         "@huggingface/transformers": "^3.5.1",
+        "@langchain/openai": "^0.5.10",
         "@langchain/redis": "^0.1.1",
         "dotenv": "^16.5.0",
         "langchain": "^0.3.21",
