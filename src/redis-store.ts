@@ -1,7 +1,9 @@
 import { RedisVectorStore } from "@langchain/redis";
 import { createClient } from 'redis';
 import { HuggingFaceEmbeddingsAdapter } from "./huggingFaceEmbeddingsAdapter";
-
+import path from "node:path";
+import dotenv from "dotenv";
+dotenv.config();
 
   export const redis = createClient({
     url: "redis://127.0.0.1:6379",

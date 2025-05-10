@@ -29,11 +29,7 @@ async function load() {
   });
   await redis.connect();
 
-  if (!process.env.HUGGINGFACE_API_KEY) {
-    throw new Error("A variável de ambiente HUGGINGFACE_API_KEY não está definida.");
-  }
-
-  const embeddings = new HuggingFaceEmbeddingsAdapter(process.env.HUGGINGFACE_API_KEY);
+  const embeddings = new HuggingFaceEmbeddingsAdapter("scripts/embedding.py");
 
   await RedisVectorStore.fromDocuments(splittedDocuments, embeddings, {
     redisClient: redis,

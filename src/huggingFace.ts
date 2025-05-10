@@ -1,32 +1,12 @@
-import fetch from "node-fetch";
-import dotenv from "dotenv";
-dotenv.config();
+import { pipeline } from '@xenova/transformers';
 
-export class HuggingFaceEmbedder {
-  private apiKey: string;
-  private model: string;
+const extractor = await pipeline('feature-extraction', 'Xenova/all-MiniLM-L6-v2');
 
+const inputs = [
+  "This is an example sentence.",
+  "Each sentence is converted to an embedding."
+];
 
-  constructor(apiKey: string,model = "deepseek-ai/DeepSeek-Prover-V2-671B") {
-    this.apiKey = apiKey;
-    this.model = model;
-  }
+const result = await extractor(inputs, { pooling: 'mean', normalize: true });
 
-  async embed(texts: string[]) {
-    const res = await fetch(`https://api-inference.huggingface.co/pipeline/feature-extraction/${this.model}`, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${this.apiKey}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ inputs: texts }),
-    });
-
-    if (!res.ok) {
-      const error = await res.text();
-      throw new Error(`Erro na API da HuggingFace: ${res.status} - ${error}`);
-    }
-
-    return await res.json();
-  }
-}
+console.log(result);
