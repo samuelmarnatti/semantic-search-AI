@@ -1,7 +1,6 @@
 import { RedisVectorStore } from "@langchain/redis";
 import { createClient } from 'redis';
 import { HuggingFaceEmbeddingsAdapter } from "./huggingFaceEmbeddingsAdapter";
-import path from "node:path";
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -13,7 +12,7 @@ dotenv.config();
     throw new Error("A variável de ambiente HUGGINGFACE_API_KEY não está definida.");
   }
 
-  const embeddings = new HuggingFaceEmbeddingsAdapter(process.env.HUGGINGFACE_API_KEY);
+  const embeddings = new HuggingFaceEmbeddingsAdapter("scripts/embedding.py");
 
  export const redisVectorStore =  new RedisVectorStore(embeddings, {
     redisClient: redis,

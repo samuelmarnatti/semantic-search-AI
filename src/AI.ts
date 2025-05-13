@@ -1,53 +1,52 @@
-import { ChatOpenAI } from "@langchain/openai";
-import {RetrievalQAChain} from 'langchain/chains';
+import { ChatGroq } from "@langchain/groq";
+import { RetrievalQAChain } from "langchain/chains";
 import { PromptTemplate } from "@langchain/core/prompts";
 import { redis, redisVectorStore } from './redis-store';
+import * as dotenv from 'dotenv';
 
- if (!process.env.OPENROUTER_API_KEY) {
-    throw new Error("A variável de ambiente OPENROUTER_API_KEY não está definida.");
-  }
+dotenv.config();
 
-const chatModel = new ChatOpenAI({
-  apiKey: process.env.OPENROUTER_API_KEY,
-  modelName: "meta-llama/llama-3-70b-instruct", // ou "deepseek-coder"
-  configuration: {
-    baseURL: "https://openrouter.ai/api/v1",
-    defaultHeaders: {
-      "HTTP-Referer": "http://localhost", 
-      "X-Title": "Igreja Episcopal Carasmática",
-    },
-  },
+const chatModel = new ChatGroq({
+  apiKey: process.env.GROQ_API_KEY,
+  model: "llama-3.3-70b-versatile", // modelo suportado pela Groq
   temperature: 0.7,
 });
+
 const prompt = new PromptTemplate({
   template: `
-  Quantas paróquias tem a igreja episcopal carismática?
+Você responde perguntas sobre a Igreja Episcopal Carismática do Brasil. O usuário está assistindo o livro de apresentação da igreja.
+Use o conteúdo das transcrições abaixo para responder à pergunta do usuário.
+Se a resposta não for encontrada nas transcrições, diga que não sabe. Não tente inventar uma resposta.
 
-  Trancrições:
+Transcrições:
 {context}
 
 Pergunta:
 {question}
   `.trim(),
   inputVariables: ['context', 'question'],
-})
+});
 
-// Large Language Model
-const chain = RetrievalQAChain.fromLLM(chatModel, redisVectorStore.asRetriever(),{
+const chain = RetrievalQAChain.fromLLM(
+  chatModel,
+  redisVectorStore.asRetriever(),
+  {
     prompt,
-    returnSourceDocuments: true, // retorna em qual textos ele encontra o conteúdo pra tirar a dúvida.
-    verbose: true // retorna log de tudo o que ele está fazendo no processo
+    returnSourceDocuments: true,
+    verbose: true,
+  }
+);
 
-})
 async function main() {
-  await redis.connect()
+  await redis.connect();
 
   const response = await chain.call({
-    query: 'Me explique o conceito de eleição.'
-  })
-  console.log(response)
+    query: 'Quantas paróquias tem a igreja episcopal carismática?'
+  });
 
-  await redis.disconnect()
+  console.log(response);
+
+  await redis.disconnect();
 }
 
 main();
