@@ -14,16 +14,14 @@ const chatModel = new ChatOpenAI({
     baseURL: "https://openrouter.ai/api/v1",
     defaultHeaders: {
       "HTTP-Referer": "http://localhost", 
-      "X-Title": "IA Teológica Cidade de Deus",
+      "X-Title": "Igreja Episcopal Carasmática",
     },
   },
   temperature: 0.7,
 });
 const prompt = new PromptTemplate({
   template: `
-  Você responde perguntas sobr teologia. O usuário está lendo o livro cidade de Deus de Sano Agostinho de Hinpona.
-  Use o conteúdo das transcrições abaixo para responder a pergunta do usuário.
-  Se a resposta não for encontrada nas transcrições, responda que você não sabe. Não tente inventar uma resposta.
+  Quantas paróquias tem a igreja episcopal carismática?
 
   Trancrições:
 {context}
