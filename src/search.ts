@@ -6,7 +6,7 @@ async function search() {
     'Quantas paróquias tem a igreja episcopal carismática?',
     5
   )
-  console.log(response)
+  // console.log(response)
 
 }
 

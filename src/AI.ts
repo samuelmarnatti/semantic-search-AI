@@ -1,10 +1,15 @@
 import { ChatGroq } from "@langchain/groq";
+import express from "express";
 import { RetrievalQAChain } from "langchain/chains";
 import { PromptTemplate } from "@langchain/core/prompts";
 import { qdrant, vectorStore } from "./qdrant-store";
 import * as dotenv from 'dotenv';
 
 dotenv.config();
+const app = express();
+app.use(express.json());
+
+app.post("/chain", async (req, res) => {
 
 const chatModel = new ChatGroq({
   apiKey: process.env.GROQ_API_KEY,
@@ -34,18 +39,17 @@ const chain = RetrievalQAChain.fromLLM(
   {
     prompt,
     returnSourceDocuments: true,
-    verbose: true,
+    verbose: false,
   }
 );
 
-async function main() {
+const { query } = req.body;
+const response = await chain.call({ query });
+const answer = response.text || response.output || "Sem resposta";
+res.json({ answer });
 
-  const response = await chain.call({
-    query: 'Quantas paróquias tem a igreja episcopal carismática?'
-  });
-
-  console.log(response);
-
-}
-
-main();
+});
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Servidor rodando em http://localhost:${PORT}`);
+});
