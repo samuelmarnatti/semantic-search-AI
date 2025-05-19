@@ -16,7 +16,8 @@ const prompt = new PromptTemplate({
   template: `
 Você responde perguntas sobre a Igreja Episcopal Carismática do Brasil. O usuário está assistindo o livro de apresentação da igreja.
 Use o conteúdo das transcrições abaixo para responder à pergunta do usuário.
-Se a resposta não for encontrada nas transcrições, diga que não sabe. Não tente inventar uma resposta.
+Se a resposta não for encontrada nas transcrições, diga que não sabe. Responda de forma natural como se tu tivesse essas informações sem citar que 
+ela está vindo de transcrições. Não tente inventar uma resposta.
 
 Transcrições:
 {context}
