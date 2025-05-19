@@ -1,7 +1,7 @@
 import { ChatGroq } from "@langchain/groq";
 import { RetrievalQAChain } from "langchain/chains";
 import { PromptTemplate } from "@langchain/core/prompts";
-import { redis, redisVectorStore } from './redis-store';
+import { qdrant, vectorStore } from "./qdrant-store";
 import * as dotenv from 'dotenv';
 
 dotenv.config();
@@ -29,7 +29,7 @@ Pergunta:
 
 const chain = RetrievalQAChain.fromLLM(
   chatModel,
-  redisVectorStore.asRetriever(),
+  vectorStore.asRetriever(),
   {
     prompt,
     returnSourceDocuments: true,
@@ -38,7 +38,6 @@ const chain = RetrievalQAChain.fromLLM(
 );
 
 async function main() {
-  await redis.connect();
 
   const response = await chain.call({
     query: 'Quantas paróquias tem a igreja episcopal carismática?'
@@ -46,7 +45,6 @@ async function main() {
 
   console.log(response);
 
-  await redis.disconnect();
 }
 
 main();
