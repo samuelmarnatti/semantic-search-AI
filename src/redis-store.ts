@@ -12,8 +12,7 @@ dotenv.config();
     throw new Error("A variável de ambiente HUGGINGFACE_API_KEY não está definida.");
   }
 
-  const embeddings = new HuggingFaceEmbeddingsAdapter("scripts/embedding.py");
-
+  const embeddings = new HuggingFaceEmbeddingsAdapter();
  export const redisVectorStore =  new RedisVectorStore(embeddings, {
     redisClient: redis,
     indexName: "textos-embeddings",
