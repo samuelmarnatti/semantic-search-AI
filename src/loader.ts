@@ -1,32 +1,44 @@
 import path from "node:path";
-
-import  { DiretoryLoader} from "langchain/document_loaders/fs/directory";
+import { Qdrant } from 'qdrant';
+import  { DirectoryLoader} from "langchain/document_loaders/fs/directory";
 import  { JSONLoader} from "langchain/document_loaders/fs/json";
-import { TolkenTextSplitter } from "langchain/text_splitter";
-// import { PuppeteerWebBaseLoader } from "langchain/document_loaders/web/puppeteer";
+import { TokenTextSplitter } from "langchain/text_splitter";
+import { QdrantVectorStore } from "@langchain/qdrant";
+import { HuggingFaceEmbeddingsAdapter } from "./huggingFaceEmbeddingsAdapter";
+import { QdrantClient } from "@qdrant/js-client-rest";
 
-// /**
-//  * Loader uses `page.evaluate(() => document.body.innerHTML)`
-//  * as default evaluate function
-//  **/
-// const loader = new PuppeteerWebBaseLoader("https://www.tabnews.com.br/");
+  const loader = new DirectoryLoader(
+    path.resolve(__dirname, "../tmp"),
+    {
+      ".json": (path) => new JSONLoader(path, "/text"),
+    }
+  );
 
-// const docs = await loader.load();
+  const qdrant = new QdrantClient({
+    url: "http://127.0.0.1:6333",
+  });
+  const embeddings = new HuggingFaceEmbeddingsAdapter();
+  // const texts = [
+  //   "LangChain facilita a construção de apps com IA.",
+  //   "Qdrant é um banco de vetores para buscas semânticas.",
+  // ];
+  async function importar() {
+    const docs = await loader.load();
 
-const loader = new DiretoryLoader(
-  path.resolve(__dirname,  '../tmp'),
-  {
-    '.json': path => new JSONLoader(path, '/text')
+    const splitter = new TokenTextSplitter({
+      encodingName: "cl100k_base",
+      chunkSize: 600,
+      chunkOverlap: 0,
+    });
+    const splittedDocuments = await splitter.splitDocuments(docs);
+
+    const vectorStore = await QdrantVectorStore.fromDocuments(splittedDocuments, embeddings, {
+        client: qdrant,
+        collectionName: "igreja_episcopal",
+      });
+    
+    console.log("Importação concluída!");
   }
-)
+  importar().catch(console.error);
 
-async function load() {
-  const docs = await loader.load()
-  const splitter = new TolkenTextSplitter({
-      encodingName: 'cl100k_base',
-      chunkSIze:600,
-      chunkOverLap: 0,
-  })
-  const splittedDocuments = await splitter.splitDocuments(docs)
-}
-load()
+
