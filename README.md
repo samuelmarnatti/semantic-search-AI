@@ -1,36 +1,86 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+readme_content = """# semantic-search-AI
 
-## Getting Started
+**semantic-search-AI** é um projeto que permite treinar modelos de IA para busca semântica de forma totalmente gratuita.  
+Enquanto a maioria dos modelos para *embedding* (como os da OpenAI) são pagos, este projeto possibilita realizar o treinamento localmente usando textos em formato JSON, além de incluir um **widget de chat** para testes.
 
-First, run the development server:
+## 🚀 Tecnologias utilizadas
+- React
+- Node.js
+- Python
+- LangChain
+- Docker
+- Hugging Face
+- Qdrant
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 📦 Instalação
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+1. **Instalar Docker**
+   - [Download do Docker](https://www.docker.com/get-started)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+2. **Criar contas e gerar chaves**
+   - [Hugging Face](https://huggingface.co/) → gere uma chave de API
+   - [Groq](https://groq.com/) → gere uma chave de API
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+3. **Configurar variáveis de ambiente**
+   - Crie o arquivo `.env.local` na raiz do projeto
+   - Adicione:
+     ```env
+     GROQ_API_KEY="sua_chave_aqui"
+     HUGGINGFACE_API_KEY="sua_chave_aqui"
+     ```
 
-## Learn More
+4. **Instalar dependências**
+   ```bash
+   npm install
+   npm install langchain @qdrant/js-client-rest @langchain/qdrant
 
-To learn more about Next.js, take a look at the following resources:
+    Rodar o Qdrant no Docker
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Sempre exibir os detalhes
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+docker run -p 6333:6333 -p 6334:6334 qdrant/qdrant
 
-## Deploy on Vercel
+Rodar a API Python
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Sempre exibir os detalhes
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+python scripts/api.py
+
+Rodar o projeto React
+
+Sempre exibir os detalhes
+
+    npm run dev
+
+        Acesse: http://localhost:3000
+
+📚 Treinamento de IA
+
+    Prepare seus dados em formato JSON especial para treinamento (veja exemplos na pasta /tmp).
+
+    Sugestão: utilize Manus ou ChatGPT para converter conteúdo para JSON.
+
+    Coloque os arquivos no diretório /tmp.
+
+    Execute o comando para criar os embeddings:
+
+Sempre exibir os detalhes
+
+pnpm tsx src/loader.ts
+
+Teste no navegador através do widget de chat.
+Exemplo de pergunta:
+
+Sempre exibir os detalhes
+
+    Quantas paróquias a igreja episcopal possui?
+
+🔑 Requisitos de API
+
+    GROQ_API_KEY
+
+    HUGGINGFACE_API_KEY
+
+f.write(readme_content)
+
+readme_path
